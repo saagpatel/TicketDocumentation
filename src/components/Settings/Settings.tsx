@@ -206,7 +206,10 @@ export function Settings() {
                 type="number"
                 min="0"
                 value={localSettings.auto_delete_days}
-                onChange={(e) => handleSettingChange('auto_delete_days', parseInt(e.target.value))}
+                onChange={(e) => {
+                  const parsed = Number.parseInt(e.target.value, 10);
+                  handleSettingChange('auto_delete_days', Number.isNaN(parsed) ? 0 : parsed);
+                }}
                 className="w-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
               />
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -232,7 +235,10 @@ export function Settings() {
                 min="5"
                 max="30"
                 value={localSettings.poll_interval_seconds}
-                onChange={(e) => handleSettingChange('poll_interval_seconds', parseInt(e.target.value))}
+                onChange={(e) => {
+                  const parsed = Number.parseInt(e.target.value, 10);
+                  handleSettingChange('poll_interval_seconds', Number.isNaN(parsed) ? 5 : parsed);
+                }}
                 className="w-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
               />
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">

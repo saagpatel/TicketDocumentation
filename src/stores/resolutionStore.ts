@@ -16,7 +16,8 @@ interface ResolutionState {
 
   // Actions
   setSelectedActivityIds: (ids: number[]) => void;
-  startGeneration: (resolutionId: number) => void;
+  startGeneration: (resolutionId?: number | null) => void;
+  setCurrentResolutionId: (resolutionId: number) => void;
   appendToken: (token: string) => void;
   finishGeneration: (success: boolean, error?: string) => void;
   setCurrentDraft: (text: string) => void;
@@ -35,12 +36,17 @@ export const useResolutionStore = create<ResolutionState>((set) => ({
 
   setSelectedActivityIds: (ids) => set({ selectedActivityIds: ids }),
 
-  startGeneration: (resolutionId) =>
+  startGeneration: (resolutionId = null) =>
     set({
       currentResolutionId: resolutionId,
       isGenerating: true,
       generationError: null,
       currentDraft: '',
+    }),
+
+  setCurrentResolutionId: (resolutionId) =>
+    set({
+      currentResolutionId: resolutionId,
     }),
 
   appendToken: (token) =>

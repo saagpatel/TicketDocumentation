@@ -1,16 +1,16 @@
-mod tray;
-mod panel;
+mod commands;
 mod db;
 mod error;
-mod monitor;
-mod commands;
-mod pattern;
 mod llm;
+mod monitor;
+mod panel;
+mod pattern;
+mod tray;
 
-use tauri::Manager;
-use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutState};
 use sqlx::SqlitePool;
 use std::sync::Arc;
+use tauri::Manager;
+use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutState};
 
 pub struct AppState {
     pub db: Arc<SqlitePool>,
@@ -29,9 +29,8 @@ pub fn run() {
 
             // Initialize database
             let app_data_dir = app.path().app_data_dir()?;
-            let db_pool = tauri::async_runtime::block_on(async {
-                db::init_database(app_data_dir).await
-            })?;
+            let db_pool =
+                tauri::async_runtime::block_on(async { db::init_database(app_data_dir).await })?;
 
             // Create shared state
             let db_arc = Arc::new(db_pool);
@@ -52,22 +51,24 @@ pub fn run() {
 
                 // Register global shortcut (Cmd+Shift+T)
                 let window_clone = window.clone();
-                app.global_shortcut().on_shortcut("CmdOrCtrl+Shift+T", move |_app, _shortcut, event| {
-                    if event.state() == ShortcutState::Pressed {
-                        match window_clone.is_visible() {
-                            Ok(true) => {
-                                let _ = window_clone.hide();
-                            }
-                            Ok(false) => {
-                                let _ = window_clone.show();
-                                let _ = window_clone.set_focus();
-                            }
-                            Err(e) => {
-                                eprintln!("Failed to check window visibility: {}", e);
+                app.global_shortcut()
+                    .on_shortcut("CmdOrCtrl+Shift+T", move |_app, _shortcut, event| {
+                        if event.state() == ShortcutState::Pressed {
+                            match window_clone.is_visible() {
+                                Ok(true) => {
+                                    let _ = window_clone.hide();
+                                }
+                                Ok(false) => {
+                                    let _ = window_clone.show();
+                                    let _ = window_clone.set_focus();
+                                }
+                                Err(e) => {
+                                    eprintln!("Failed to check window visibility: {}", e);
+                                }
                             }
                         }
-                    }
-                }).ok();
+                    })
+                    .ok();
             }
 
             Ok(())

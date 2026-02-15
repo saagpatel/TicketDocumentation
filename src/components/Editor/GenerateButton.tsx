@@ -8,19 +8,26 @@ interface GenerateButtonProps {
 }
 
 export function GenerateButton({ templateId, disabled }: GenerateButtonProps) {
-  const { selectedActivityIds, startGeneration } = useResolutionStore();
+  const {
+    selectedActivityIds,
+    startGeneration,
+    setCurrentResolutionId,
+    finishGeneration,
+  } = useResolutionStore();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGenerate = async () => {
     if (disabled || selectedActivityIds.length === 0) return;
 
     setIsLoading(true);
+    startGeneration(null);
     try {
       const resolutionId = await generateResolution(selectedActivityIds, templateId);
-      startGeneration(resolutionId);
+      setCurrentResolutionId(resolutionId);
     } catch (error) {
       console.error('Failed to start generation:', error);
       const errorMessage = error instanceof Error ? error.message : String(error);
+      finishGeneration(false, errorMessage);
       alert(`Failed to start generation: ${errorMessage}`);
     } finally {
       setIsLoading(false);

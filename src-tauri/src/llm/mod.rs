@@ -1,8 +1,8 @@
 pub mod generate;
 pub mod templates;
 
-use ollama_rs::Ollama;
 use crate::error::AppError;
+use ollama_rs::Ollama;
 
 /// Create a new Ollama client with the given base URL
 pub fn create_client(base_url: &str, port: u16) -> Ollama {
@@ -13,10 +13,7 @@ pub fn create_client(base_url: &str, port: u16) -> Ollama {
 pub async fn check_health(client: &Ollama) -> Result<Vec<String>, AppError> {
     match client.list_local_models().await {
         Ok(models) => {
-            let model_names: Vec<String> = models
-                .iter()
-                .map(|m| m.name.clone())
-                .collect();
+            let model_names: Vec<String> = models.iter().map(|m| m.name.clone()).collect();
             Ok(model_names)
         }
         Err(e) => Err(AppError::OllamaOffline {

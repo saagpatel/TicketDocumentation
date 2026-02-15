@@ -25,7 +25,9 @@ pub async fn stop_monitoring(state: State<'_, AppState>) -> Result<(), AppError>
 }
 
 #[tauri::command]
-pub async fn get_monitoring_status(state: State<'_, AppState>) -> Result<MonitoringStatus, AppError> {
+pub async fn get_monitoring_status(
+    state: State<'_, AppState>,
+) -> Result<MonitoringStatus, AppError> {
     let monitor = state.monitor.lock().await;
     let is_running = monitor.is_running();
 
@@ -58,12 +60,10 @@ async fn count_activities_today(pool: &sqlx::SqlitePool) -> Result<u64, AppError
         .and_utc()
         .to_rfc3339();
 
-    let count: i64 = sqlx::query_scalar(
-        "SELECT COUNT(*) FROM activities WHERE started_at >= ?"
-    )
-    .bind(today_start)
-    .fetch_one(pool)
-    .await?;
+    let count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM activities WHERE started_at >= ?")
+        .bind(today_start)
+        .fetch_one(pool)
+        .await?;
 
     Ok(count as u64)
 }

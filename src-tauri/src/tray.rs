@@ -8,8 +8,12 @@ pub fn create_tray<R: Runtime>(app: &tauri::AppHandle<R>) -> tauri::Result<()> {
     let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
     let menu = Menu::with_items(app, &[&quit_i])?;
 
-    let icon = app.default_window_icon()
-        .ok_or_else(|| tauri::Error::InvalidIcon(std::io::Error::new(std::io::ErrorKind::NotFound, "No default icon")))?;
+    let icon = app.default_window_icon().ok_or_else(|| {
+        tauri::Error::InvalidIcon(std::io::Error::new(
+            std::io::ErrorKind::NotFound,
+            "No default icon",
+        ))
+    })?;
 
     let _tray = TrayIconBuilder::with_id("tray")
         .icon(icon.clone())

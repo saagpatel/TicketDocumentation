@@ -35,6 +35,23 @@ function App() {
     checkFirstLaunch();
   }, []);
 
+  useEffect(() => {
+    const handleOnboardingComplete = async () => {
+      try {
+        const status = await getMonitoringStatus();
+        const needsOnboarding = !status.has_screen_recording_permission || !status.is_running;
+        setShowOnboarding(needsOnboarding);
+      } catch {
+        setShowOnboarding(false);
+      }
+    };
+
+    window.addEventListener('onboarding-complete', handleOnboardingComplete);
+    return () => {
+      window.removeEventListener('onboarding-complete', handleOnboardingComplete);
+    };
+  }, []);
+
   // Set up event listeners
   useActivityStream();
   useMonitoringStatus();

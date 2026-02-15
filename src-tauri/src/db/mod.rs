@@ -29,12 +29,14 @@ pub async fn init_database(app_data_dir: PathBuf) -> Result<SqlitePool, sqlx::Er
 }
 
 async fn run_migrations(pool: &SqlitePool) -> Result<(), sqlx::Error> {
-    // Read and execute the migration SQL file
-    let migration_sql = include_str!("../../migrations/001_initial.sql");
+    let migrations = [
+        include_str!("../../migrations/001_initial.sql"),
+        include_str!("../../migrations/002_add_app_context.sql"),
+    ];
 
-    sqlx::raw_sql(migration_sql)
-        .execute(pool)
-        .await?;
+    for migration_sql in migrations {
+        sqlx::raw_sql(migration_sql).execute(pool).await?;
+    }
 
     Ok(())
 }

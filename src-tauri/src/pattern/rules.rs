@@ -16,7 +16,8 @@ impl PatternRule {
             // SAFETY: These patterns are hardcoded string literals in get_rules() and are guaranteed to be valid regex.
             // They are tested in the test suite and only compiled once at startup.
             app_regex: Regex::new(app_pattern).expect("hardcoded regex pattern should be valid"),
-            title_regex: title_pattern.map(|p| Regex::new(p).expect("hardcoded regex pattern should be valid")),
+            title_regex: title_pattern
+                .map(|p| Regex::new(p).expect("hardcoded regex pattern should be valid")),
         }
     }
 
@@ -173,10 +174,7 @@ mod tests {
 
     #[test]
     fn test_no_category_match() {
-        assert_eq!(
-            detect_category("Chrome", "Google Search"),
-            None
-        );
+        assert_eq!(detect_category("Chrome", "Google Search"), None);
     }
 
     #[test]

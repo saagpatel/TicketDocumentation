@@ -1,11 +1,11 @@
+use super::sanitizer;
+use crate::pattern;
 use active_win_pos_rs::get_active_window;
 use chrono::Utc;
 use sqlx::SqlitePool;
 use std::sync::Arc;
 use tokio::sync::watch;
 use tokio::time::{interval, Duration};
-use super::sanitizer;
-use crate::pattern;
 
 #[derive(Debug, Clone)]
 struct LastActivity {
@@ -14,10 +14,7 @@ struct LastActivity {
     started_at: String,
 }
 
-pub async fn start_polling(
-    db: Arc<SqlitePool>,
-    mut stop_rx: watch::Receiver<bool>,
-) {
+pub async fn start_polling(db: Arc<SqlitePool>, mut stop_rx: watch::Receiver<bool>) {
     let mut interval = interval(Duration::from_secs(5));
     let mut last_activity: Option<LastActivity> = None;
 
@@ -178,11 +175,10 @@ async fn close_activity(
 }
 
 async fn load_exclusions(pool: &SqlitePool) -> Vec<String> {
-    let result: Result<Vec<String>, sqlx::Error> = sqlx::query_scalar(
-        "SELECT app_name FROM exclusions"
-    )
-    .fetch_all(pool)
-    .await;
+    let result: Result<Vec<String>, sqlx::Error> =
+        sqlx::query_scalar("SELECT app_name FROM exclusions")
+            .fetch_all(pool)
+            .await;
 
     result.unwrap_or_default()
 }

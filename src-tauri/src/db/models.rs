@@ -17,7 +17,7 @@ pub struct Activity {
 #[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
 pub struct Resolution {
     pub id: i64,
-    pub activity_ids: String,       // JSON array string
+    pub activity_ids: String, // JSON array string
     pub template_id: String,
     pub prompt_text: String,
     pub generated_text: String,

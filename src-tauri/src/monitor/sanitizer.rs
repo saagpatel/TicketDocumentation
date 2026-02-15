@@ -6,30 +6,22 @@ use std::sync::OnceLock;
 // Using unwrap() here is safe because these patterns never change and are tested.
 fn credit_card_regex() -> &'static Regex {
     static REGEX: OnceLock<Regex> = OnceLock::new();
-    REGEX.get_or_init(|| {
-        Regex::new(r"\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b").unwrap()
-    })
+    REGEX.get_or_init(|| Regex::new(r"\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b").unwrap())
 }
 
 fn ssn_regex() -> &'static Regex {
     static REGEX: OnceLock<Regex> = OnceLock::new();
-    REGEX.get_or_init(|| {
-        Regex::new(r"\b\d{3}-\d{2}-\d{4}\b").unwrap()
-    })
+    REGEX.get_or_init(|| Regex::new(r"\b\d{3}-\d{2}-\d{4}\b").unwrap())
 }
 
 fn email_regex() -> &'static Regex {
     static REGEX: OnceLock<Regex> = OnceLock::new();
-    REGEX.get_or_init(|| {
-        Regex::new(r"\b[\w.-]+@[\w.-]+\.\w+\b").unwrap()
-    })
+    REGEX.get_or_init(|| Regex::new(r"\b[\w.-]+@[\w.-]+\.\w+\b").unwrap())
 }
 
 fn account_number_regex() -> &'static Regex {
     static REGEX: OnceLock<Regex> = OnceLock::new();
-    REGEX.get_or_init(|| {
-        Regex::new(r"(?i)(account|acct|#)\s*\d{4,}\b").unwrap()
-    })
+    REGEX.get_or_init(|| Regex::new(r"(?i)(account|acct|#)\s*\d{4,}\b").unwrap())
 }
 
 fn phone_number_regex() -> &'static Regex {
@@ -45,11 +37,21 @@ pub fn sanitize_title(title: &str) -> String {
     let mut sanitized = title.to_string();
 
     // Apply each regex replacement
-    sanitized = credit_card_regex().replace_all(&sanitized, "[REDACTED]").to_string();
-    sanitized = ssn_regex().replace_all(&sanitized, "[REDACTED]").to_string();
-    sanitized = email_regex().replace_all(&sanitized, "[REDACTED]").to_string();
-    sanitized = account_number_regex().replace_all(&sanitized, "[REDACTED]").to_string();
-    sanitized = phone_number_regex().replace_all(&sanitized, "[REDACTED]").to_string();
+    sanitized = credit_card_regex()
+        .replace_all(&sanitized, "[REDACTED]")
+        .to_string();
+    sanitized = ssn_regex()
+        .replace_all(&sanitized, "[REDACTED]")
+        .to_string();
+    sanitized = email_regex()
+        .replace_all(&sanitized, "[REDACTED]")
+        .to_string();
+    sanitized = account_number_regex()
+        .replace_all(&sanitized, "[REDACTED]")
+        .to_string();
+    sanitized = phone_number_regex()
+        .replace_all(&sanitized, "[REDACTED]")
+        .to_string();
 
     sanitized
 }
@@ -72,10 +74,7 @@ mod tests {
 
     #[test]
     fn test_ssn_redaction() {
-        assert_eq!(
-            sanitize_title("SSN: 123-45-6789"),
-            "SSN: [REDACTED]"
-        );
+        assert_eq!(sanitize_title("SSN: 123-45-6789"), "SSN: [REDACTED]");
     }
 
     #[test]
@@ -92,22 +91,13 @@ mod tests {
             sanitize_title("Chase Checking #1234567"),
             "Chase Checking [REDACTED]"
         );
-        assert_eq!(
-            sanitize_title("Account 98765432"),
-            "[REDACTED]"
-        );
+        assert_eq!(sanitize_title("Account 98765432"), "[REDACTED]");
     }
 
     #[test]
     fn test_phone_redaction() {
-        assert_eq!(
-            sanitize_title("Call: (555) 123-4567"),
-            "Call: [REDACTED]"
-        );
-        assert_eq!(
-            sanitize_title("Phone: 555-123-4567"),
-            "Phone: [REDACTED]"
-        );
+        assert_eq!(sanitize_title("Call: (555) 123-4567"), "Call: [REDACTED]");
+        assert_eq!(sanitize_title("Phone: 555-123-4567"), "Phone: [REDACTED]");
     }
 
     #[test]

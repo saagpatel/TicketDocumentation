@@ -24,7 +24,7 @@ pub async fn get_activities(
     let mut query = String::from(
         "SELECT id, app_name, window_title, process_path, window_id, detected_category,
                started_at, ended_at, duration_seconds, created_at
-        FROM activities WHERE 1=1"
+        FROM activities WHERE 1=1",
     );
 
     let mut bindings: Vec<String> = Vec::new();

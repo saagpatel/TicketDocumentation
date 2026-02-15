@@ -20,9 +20,7 @@ pub async fn check_ollama_status(state: State<'_, AppState>) -> Result<OllamaSta
     match llm::check_health(&client).await {
         Ok(models) => {
             // Get active model from settings
-            let active_model = get_setting(&state.db, "ollama_model")
-                .await
-                .ok();
+            let active_model = get_setting(&state.db, "ollama_model").await.ok();
 
             Ok(OllamaStatus {
                 is_running: true,
