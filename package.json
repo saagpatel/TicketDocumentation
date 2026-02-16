@@ -5,9 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:lean": "./scripts/dev-lean.sh",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
+    "clean:heavy": "./scripts/clean-heavy.sh",
+    "clean:local": "./scripts/clean-local.sh",
     "test": "vitest run",
     "test:watch": "vitest"
   },

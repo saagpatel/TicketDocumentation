@@ -190,6 +190,40 @@ pnpm tauri dev
 
 The built app will be in `src-tauri/target/release/bundle/`.
 
+### Development Modes (Normal vs Lean)
+
+Use normal mode when you want faster rebuilds and don't mind local build artifacts:
+
+```bash
+pnpm tauri dev
+```
+
+Use lean mode when disk space is tight:
+
+```bash
+pnpm dev:lean
+```
+
+`pnpm dev:lean` starts the app with temporary cache paths for Rust (`CARGO_TARGET_DIR`) and Vite (`VITE_CACHE_DIR`). Those temporary artifacts are removed automatically when the process exits.
+
+### Cleanup Commands
+
+Targeted cleanup (heavy build artifacts only, keeps dependencies):
+
+```bash
+pnpm clean:heavy
+```
+
+Full local cleanup (all reproducible local caches/artifacts, including `node_modules`):
+
+```bash
+pnpm clean:local
+```
+
+Tradeoff summary:
+- **Normal dev (`pnpm tauri dev`)**: uses more disk, starts/rebuilds faster after first run.
+- **Lean dev (`pnpm dev:lean`)**: uses less persistent disk, but startup is slower because Rust/Vite caches are rebuilt each run.
+
 ---
 
 ## Configuration
