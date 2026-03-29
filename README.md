@@ -1,308 +1,74 @@
-# TicketDocs
+# TicketDocumentation
 
-**Automated activity tracking and ticket documentation generator for IT support teams.**
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178c6?style=flat-square&logo=typescript&logoColor=white)](#) [![Rust](https://img.shields.io/badge/Rust-dea584?style=flat-square&logo=rust&logoColor=white)](#) [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](#)
 
-TicketDocs monitors your desktop activity, categorizes what you're working on, and generates professional ticket documentation using local AI—so you can focus on solving problems instead of writing about them.
+> You fix the problem. TicketDocs writes the resolution note — based on what you actually did, not what you remember doing
 
----
-
-## What Is This?
-
-TicketDocs is a desktop app that:
-- **Tracks your activity** - Monitors active windows and applications to understand what you're working on
-- **Categorizes automatically** - Uses pattern matching to detect ticket systems, development tools, and work contexts
-- **Generates documentation** - Transforms your activity timeline into professional ticket resolutions using local LLM (Ollama)
-- **Protects privacy** - Sanitizes sensitive data (credit cards, SSNs, API keys) before processing
-
-Built with Tauri + React for a fast, native desktop experience with minimal resource usage.
-
----
-
-## Why Would You Use This?
-
-**If you're an IT support engineer, DevOps, or SRE:**
-- Stop context-switching between fixing issues and documenting what you did
-- Generate accurate ticket resolutions based on actual work performed
-- Maintain detailed activity logs for audits and retrospectives
-- Never forget what you did to solve that weird bug last week
-
-**The problem:** Writing ticket documentation is tedious, interrupts flow state, and is often done from memory (leading to incomplete or inaccurate notes).
-
-**The solution:** TicketDocs runs silently in the background, tracks everything you do, and generates documentation on-demand. You do the work, it writes the docs.
-
----
-
-## What Would You Use It For?
-
-### Primary Use Cases
-
-**1. Ticket Resolution Documentation**
-- Monitor your troubleshooting session (checking logs, running commands, testing fixes)
-- Select the relevant activities from your timeline
-- Generate a professional resolution note with steps taken and outcome
-- Copy to ServiceNow/Jira/your ticket system
-
-**2. Activity Logging for Compliance**
-- Automatic tracking of all application and window usage
-- Privacy-safe logging (sensitive data sanitized)
-- Searchable activity history
-- Export activity logs for audits
-
-**3. Time Tracking & Retrospectives**
-- See exactly how long you spent on each task
-- Review your activity timeline to understand where time went
-- Generate summaries of work performed during a sprint/shift
-
-**4. Knowledge Base Creation**
-- Turn your problem-solving sessions into reusable documentation
-- Build a library of solutions based on real work
-- Share resolution patterns with your team
-
----
-
-## How Would You Use It?
-
-### Setup (First Time)
-
-1. **Install Ollama**
-   ```bash
-   # macOS
-   brew install ollama
-
-   # Start Ollama service
-   ollama serve
-
-   # Pull a model (e.g., llama3)
-   ollama pull llama3
-   ```
-
-2. **Grant Permissions**
-   - On macOS: System Settings → Privacy & Security → Screen Recording
-   - Enable TicketDocs to monitor window titles and app names
-
-3. **Configure Settings**
-   - Set your preferred Ollama model
-   - Add app/title patterns for auto-categorization
-   - Configure exclusions for personal apps/windows
-
-### Daily Workflow
-
-1. **Start Monitoring**
-   - Launch TicketDocs
-   - Monitoring starts automatically (runs in system tray)
-   - Continue working normally—the app tracks in the background
-
-2. **Work on a Ticket**
-   - Open your ticket system (ServiceNow, Jira, etc.)
-   - Troubleshoot the issue (check logs, run commands, test fixes)
-   - TicketDocs captures all your activity
-
-3. **Generate Documentation**
-   - Open TicketDocs timeline view
-   - Select activities related to the ticket (drag to select or click individual items)
-   - Click "Generate Resolution"
-   - Review and edit the AI-generated documentation
-   - Copy to your ticket system
-
-4. **Refine Over Time**
-   - Add custom patterns to auto-categorize your frequently used tools
-   - Build templates for common ticket types
-   - Adjust settings to filter out noise (personal browsing, etc.)
-
-### Example Scenario
-
-```
-You get a ticket: "Production API returning 500 errors"
-
-1. You investigate:
-   - Open CloudWatch logs
-   - SSH into production server
-   - Check database connections
-   - Find a memory leak in a worker process
-   - Restart the service
-   - Monitor for 30 minutes to confirm fix
-
-2. TicketDocs captures:
-   - CloudWatch window (log analysis)
-   - Terminal sessions (SSH commands)
-   - Database client (connection checks)
-   - Service restart commands
-   - Monitoring dashboards
-
-3. You generate docs:
-   - Select those activities (30-minute window)
-   - Click "Generate Resolution"
-   - TicketDocs produces:
-     "Investigated production API errors via CloudWatch logs.
-      Identified memory leak in worker process consuming 8GB RAM.
-      Restarted service using systemctl restart api-worker.
-      Monitored for 30 minutes post-restart - no further errors.
-      Resolution: Memory leak in worker process, restarted service."
-
-4. You copy to ticket, mark resolved, move on.
-```
-
----
+TicketDocumentation monitors your desktop activity, categorizes what you're working on, and generates professional ticket documentation using a local LLM via Ollama. No cloud. Sensitive data (credit cards, SSNs, API keys) is sanitized before processing. Built with Tauri + React for a fast, native desktop experience with minimal resource usage.
 
 ## Features
 
-### Core Functionality
-- ✅ **Activity Monitoring** - Track active windows, applications, and process paths
-- ✅ **Smart Categorization** - Pattern-based auto-detection of ticket systems, dev tools, etc.
-- ✅ **Privacy Sanitization** - Automatically removes credit cards, SSNs, API keys from logs
-- ✅ **Local LLM Generation** - Uses Ollama (fully private, runs on your machine)
-- ✅ **Timeline View** - Visual activity history with filtering and search
-- ✅ **Custom Templates** - Define resolution note formats for different ticket types
-- ✅ **Settings Management** - Configurable patterns, exclusions, and preferences
+- **Activity monitoring** — tracks active windows and applications in real time to build a timeline of what you worked on
+- **Automatic categorization** — pattern matching detects ticket systems, development tools, log viewers, and work contexts without any manual tagging
+- **Local LLM generation** — transforms your activity timeline into a professional ticket resolution using Ollama; no API key, no upload, no token cost
+- **Privacy-first** — credit cards, SSNs, and API keys are scrubbed from activity data before it reaches the LLM
+- **Timeline selection** — choose which activities to include; exclude unrelated windows before generating the note
+- **Audit-ready logs** — activity logs are stored in SQLite for retrospectives, audits, and "what did I do last Tuesday" lookups
 
-### Technical Details
-- **Built with:** Tauri (Rust) + React + TypeScript
-- **Database:** SQLite (local, encrypted activity storage)
-- **LLM:** Ollama integration (llama3, mixtral, or any Ollama-compatible model)
-- **Platforms:** macOS (primary), Linux support planned
-- **Privacy:** All processing local, no cloud services, sanitized data
-
----
-
-## Installation
+## Quick Start
 
 ### Prerequisites
-- macOS 11+ (Big Sur or later)
-- Ollama installed and running
-- Screen Recording permission
 
-### Build from Source
+- macOS (primary target; Windows/Linux planned)
+- Node.js 18+
+- Rust stable toolchain (via [rustup](https://rustup.rs))
+- [Ollama](https://ollama.com) running locally
+  ```bash
+  ollama pull llama3.2
+  ```
+
+### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/samueladad75-byte/TicketDocs.git
-cd TicketDocs
-
-# Install dependencies
+git clone https://github.com/saagpatel/TicketDocumentation.git
+cd TicketDocumentation
 pnpm install
-
-# Build the app
-pnpm tauri build
-
-# Or run in development
-pnpm tauri dev
 ```
 
-The built app will be in `src-tauri/target/release/bundle/`.
-
----
-
-## Configuration
-
-### Settings Panel
-
-Access via the Settings tab in the app:
-
-- **Ollama Model**: Choose which model to use for generation (llama3, mixtral, etc.)
-- **App Context**: Set your primary ticket system (ServiceNow, Jira, etc.)
-- **Exclusions**: Apps/windows to ignore (e.g., Slack, personal browsing)
-- **Patterns**: Define regex patterns to categorize activities
-
-### Custom Patterns
-
-Add patterns to auto-categorize activities:
-
-```json
-{
-  "app_pattern": "ServiceNow",
-  "title_pattern": "INC\\d+",
-  "category": "Incident Management"
-}
-```
-
----
-
-## Privacy & Security
-
-- **No telemetry** - Zero data sent to external servers
-- **Local processing** - All LLM generation happens on your machine via Ollama
-- **Data sanitization** - Credit cards, SSNs, API keys stripped before storage
-- **Encrypted storage** - SQLite database stored locally
-- **Permission-based** - Only monitors what you explicitly grant access to
-
----
-
-## Development
-
-### Tech Stack
-- **Frontend:** React 18 + TypeScript + Tailwind CSS
-- **Backend:** Rust (Tauri)
-- **Database:** SQLite with sqlx
-- **LLM:** Ollama API integration
-- **State:** Zustand stores
-- **Testing:** Vitest
-
-### Project Structure
-```
-TicketDocs/
-├── src/                    # React frontend
-│   ├── components/         # UI components
-│   ├── hooks/             # Custom React hooks
-│   ├── stores/            # Zustand state stores
-│   └── lib/               # Utilities and types
-├── src-tauri/             # Rust backend
-│   ├── src/
-│   │   ├── commands/      # Tauri commands (API)
-│   │   ├── db/            # Database layer
-│   │   ├── llm/           # LLM integration
-│   │   ├── monitor/       # Activity monitoring
-│   │   └── pattern/       # Pattern matching
-│   └── migrations/        # Database migrations
-└── README.md
-```
-
-### Running Tests
+### Usage
 
 ```bash
-# Rust tests
-cd src-tauri
-cargo test
+# Start Ollama (if not already running)
+ollama serve
 
-# TypeScript tests
+# Development mode
+pnpm tauri dev
+
+# Run tests
 pnpm test
+
+# Production build
+pnpm tauri build
 ```
 
----
+Grant Accessibility permission when prompted on first launch — macOS requires this for active window monitoring.
 
-## Roadmap
+## Tech Stack
 
-- [ ] Windows/Linux support
-- [ ] Browser extension for web-based tracking
-- [ ] Team collaboration (shared templates, pattern libraries)
-- [ ] Advanced analytics (time spent per category, productivity insights)
-- [ ] Export to multiple formats (Markdown, JSON, CSV)
-- [ ] Integration plugins (ServiceNow API, Jira API)
+| Layer | Technology |
+|-------|------------|
+| Desktop shell | Tauri 2 |
+| Frontend | React 18, TypeScript, Tailwind CSS |
+| State | Zustand |
+| Backend | Rust (activity monitoring, pattern matching) |
+| Database | SQLite via sqlx |
+| LLM | Ollama API (local inference) |
+| Tests | Vitest |
 
----
+## Architecture
 
-## Contributing
-
-Contributions welcome! This project follows conventional commits and uses:
-- Rust with `cargo fmt` and `clippy`
-- TypeScript strict mode
-- React functional components only
-
-See issues for planned features and bugs.
-
----
+The Rust backend runs two independent loops: an activity monitor that polls the macOS Accessibility API for the frontmost window and application name, and a pattern matcher that classifies each window into a work category. Both write to SQLite via sqlx with async transactions. The LLM pipeline is invoked on demand — the frontend sends a slice of the activity log to a Tauri command, the Rust backend sanitizes the data, builds a structured prompt, and streams the Ollama response back via Tauri events. The frontend never has direct access to raw activity data.
 
 ## License
 
-MIT License - see LICENSE file for details.
-
----
-
-## Credits
-
-Built by IT support engineers, for IT support engineers who'd rather fix problems than write about fixing problems.
-
-**Stack:**
-- [Tauri](https://tauri.app/) - Desktop app framework
-- [Ollama](https://ollama.ai/) - Local LLM runtime
-- [React](https://react.dev/) - UI framework
-- [Tailwind CSS](https://tailwindcss.com/) - Styling
+MIT
