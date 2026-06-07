@@ -7,6 +7,7 @@ const host = process.env.TAURI_DEV_HOST;
 // https://vite.dev/config/
 export default defineConfig(async () => ({
   plugins: [react()],
+  cacheDir: process.env.VITE_CACHE_DIR || "node_modules/.vite",
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
@@ -33,7 +34,7 @@ export default defineConfig(async () => ({
   // Vitest configuration
   test: {
     globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/test/setup.ts',
+    environment: "jsdom",
+    setupFiles: "./src/test/setup.ts",
   },
 }));
